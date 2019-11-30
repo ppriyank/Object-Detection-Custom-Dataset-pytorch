@@ -22,12 +22,15 @@ format: `Train/Test_objects.json` : [{"boxes": [[..], [...], [...]], "labels": "
 
 # Verification
 
-```python verify.py``` (check `verify/`)  
+```python verify.py``` (check `verify/` folder)  
 
-**Something like This**
+**Something like This**   
    <img src="https://github.com/ppriyank/Object-Detection-Custom-Dataset-pytorch/blob/master/verify/7.jpg" width="700">
 
 
 
 # Training 
 
+```python modified_train.py``` (check `verify/`)   
+
+if you want to load pretrained weights : [gdrive](https://drive.google.com/file/d/19pgfEaFIUSiQ9bcwqBbU0bTDmk2KK0cJ/view?usp=sharing) 
