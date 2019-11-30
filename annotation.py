@@ -1,44 +1,38 @@
 import glob
 import os  
 import json 
+import xml.etree.ElementTree as ET
 
-unique_labels = {'Laptop':1, 'Person':2, 'Lights':3, "Drinks":4, "Projector":5, "background": 0}
-temp_dict ={15 : 'Lights', 16: 'Person' , 17: 'Laptop', 18: "Drinks", 19: "Projector"}
+
+unique_labels = {'laptop':1, 'face':2, 'light':3, "drinks":4, "projector":5, "background": 0}
 
 path = os.path.abspath("/scratch/pp1953/cml/ass/class_pics/")
-annotation_path = "/scratch/pp1953/cml/ass/anno/"
+annotation_path = "/scratch/pp1953/cml/ass/anotations/"
 dict ={}
 
-Original_image_height = 3024
-Original_image_width = 4032
-
-for file in glob.glob(annotation_path + "*.txt"): 
-	print(file)	
-	temp = file.split("/")[-1][:-3]
-	if temp == 'classes.': continue
-	image_name= temp + "jpg"
-	image_path = path + "/" + image_name
-	filepath = 'Iliad.txt'
-	with open(file) as fp:
-   		line = fp.readline()
-   		while line:
-   			string = line.strip()
-   			print("Line : {}".format(string))
-   			row = string.split(" ")
-   			line = fp.readline()
-   			boxs =[] 
-   			for i,x in enumerate(row[1:]):
-   				x = float(x)
-   				if i%2 == 0:
-   					boxs.append(int(x* Original_image_width))
-   				else:
-   					boxs.append(int(x* Original_image_height))
-   			if image_path in dict:
-   				dict[image_path]["boxes"].append(boxs)
-   				dict[image_path]["labels"].append( unique_labels[  temp_dict[ int(row[0])]  ]  )
-   				dict[image_path]["difficulties"].append(0 )
-   			else:
-   				dict[image_path] = {"boxes": [boxs], "labels": [unique_labels[  temp_dict[ int(row[0])]]], "difficulties": [0] } 
+for file in glob.glob(annotation_path + "*.xml"): 
+  print(file)
+  temp = file.split("/")[-1][:-3]
+  if temp == 'classes.':continue
+  image_name= temp + "jpg"
+  image_path = path + "/" + image_name
+  print(image_path)
+  tree = ET.parse(file)
+  root = tree.getroot()
+  boxs =[] 
+  labels =[]
+  difficulties = []
+  for object in root.iter('object'):
+    label = object.find('name').text.lower().strip()
+    bbox = object.find('bndbox')
+    xmin = int(bbox.find('xmin').text) - 1
+    ymin = int(bbox.find('ymin').text) - 1
+    xmax = int(bbox.find('xmax').text) - 1
+    ymax = int(bbox.find('ymax').text) - 1
+    boxs.append([xmin, ymin, xmax, ymax])
+    labels.append(unique_labels[ label  ])
+    difficulties.append(0)
+  dict[image_path] = {"boxes": boxs, "labels": labels, "difficulties": difficulties} 
 
    			
 
