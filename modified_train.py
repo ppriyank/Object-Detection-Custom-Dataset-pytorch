@@ -13,7 +13,7 @@ import numpy as np
 import argparse
 parser = argparse.ArgumentParser(description='CML Assignment')
 parser.add_argument('--name', default='', type=str, help='name of the model')
-parser.add_argument('--checkpoint', default=None, type=str, help='checkpoint name')
+parser.add_argument('--checkpoint', action='store_true', default=False, help='checkpoint name')
 args = parser.parse_args()
 
 
@@ -67,15 +67,6 @@ val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=1, shuffle=True
 from detect import detect
 
 
-
-img_path = '/scratch/pp1953/cml/ass/class_pics/IMG_0504.jpg'
-original_image1 = Image.open(img_path, mode='r')
-img_path = '/scratch/pp1953/cml/ass/class_pics/IMG_0505.jpg'
-original_image2 = Image.open(img_path, mode='r')
-
-original_image1 = original_image1.convert('RGB')
-original_image2 = original_image2.convert('RGB')
-
 def validate(val_loader, model, criterion):
     model.eval()  # eval mode disables dropout
     batch_time = AverageMeter()
@@ -105,11 +96,18 @@ def validate(val_loader, model, criterion):
                                                                       batch_time=batch_time,
                                                                       loss=losses))
     
-    
-    det1_image= detect(original_image1, min_score=0.2, max_overlap=0.5, top_k=200, model=model)
-    det1_image.save(args.name + "IMG_0504.jpg", "JPEG")
-    det2_image = detect(original_image2, min_score=0.2, max_overlap=0.5, top_k=200, model=model)
-    det2_image.save(args.name + "IMG_0505.jpg", "JPEG")
+    # try:
+    #     os.mkdir("verify/")
+    # except OSError:
+    #     None
+    # img_path = '/scratch/pp1953/cml/ass/class_pics/IMG_0504.jpg'
+    # original_image1 = Image.open(img_path, mode='r')
+    # img_path = '/scratch/pp1953/cml/ass/class_pics/IMG_0505.jpg'
+    # original_image2 = Image.open(img_path, mode='r')
+    # original_image1 = original_image1.convert('RGB')
+    # original_image2 = original_image2.convert('RGB')
+    # det1_image= detect(original_image1, min_score=0.2, max_overlap=0.5, top_k=200, model=model).save("verify/" + args.name + "IMG_0504.jpg", "JPEG")
+    # det2_image = detect(original_image2, min_score=0.2, max_overlap=0.5, top_k=200, model=model).save("verify/" + args.name + "IMG_0505.jpg", "JPEG")
     
 
     print('\n * LOSS - {loss.avg:.3f}\n'.format(loss=losses))
@@ -189,7 +187,7 @@ optimizer = torch.optim.Adam(params=[{'params': biases, 'lr': 2 * lr}, {'params'
                             # lr=lr, momentum=momentum, weight_decay=weight_decay)
 
 
-if checkpoint is not None:
+if checkpoint:
 	# checkpoint = torch.load(checkpoint,map_location=device)
 	# start_epoch = checkpoint['epoch'] + 1
 	# epochs_since_improvement = checkpoint['epochs_since_improvement']

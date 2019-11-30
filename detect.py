@@ -102,4 +102,9 @@ if __name__ == '__main__':
     img_path = '/scratch/pp1953/cml/ass/class_pics/IMG_0504.jpg'
     original_image = Image.open(img_path, mode='r')
     original_image = original_image.convert('RGB')
-    detect(original_image, min_score=0.2, max_overlap=0.1, top_k=1000, model=model).save("detection.jpg", "JPEG")
+    try:
+        os.mkdir("verify/")
+    except OSError:
+        None
+    
+    detect(original_image, min_score=0.2, max_overlap=0.1, top_k=1000, model=model).save("verify/detection.jpg", "JPEG")
