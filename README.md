@@ -24,7 +24,9 @@ format: `Train/Test_objects.json` : [{"boxes": [[..], [...], [...]], "labels": "
 
 ```python verify.py``` (check `verify/`)  
 
-[Something like This](https://github.com/ppriyank/Object-Detection-Custom-Dataset-pytorch/blob/master/verify/7.jpg)
+**Something like This**
+   <img src="https://github.com/ppriyank/Object-Detection-Custom-Dataset-pytorch/blob/master/verify/7.jpg" width="700">
+
 
 
 # Training 
