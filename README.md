@@ -13,8 +13,13 @@ Store the labels in "anotations" folder (or any other folder, just change the pa
 
 Creates "TEST_images.json" , "TEST_objects.json" , "TRAIN_images.json" , "TRAIN_objects.json"  
 
+format: `Train/Test_images.json` : [list of files names]  
+format: `Train/Test_objects.json` : [{"boxes": [[..], [...], [...]], "labels": "boxes": [[..], [...], [...]]} , {...}, {...} ... ]    
+
 
 # Verification
 
 ```python verify.py```
+
+
 
