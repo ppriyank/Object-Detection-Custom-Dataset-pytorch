@@ -180,14 +180,29 @@ for param_name, param in model.named_parameters():
         else:
             not_biases.append(param)
 
-optimizer = torch.optim.Adam(params=[{'params': biases, 'lr': 2 * lr}, {'params': not_biases}],
-                            lr=lr, weight_decay=weight_decay)
 
-# optimizer = torch.optim.SGD(params=[{'params': biases, 'lr': 2 * lr}, {'params': not_biases}],
-                            # lr=lr, momentum=momentum, weight_decay=weight_decay)
+# optimizer = torch.optim.Adam(params=[{'params': biases, 'lr': 2 * lr}, {'params': not_biases}],
+#                             lr=lr, weight_decay=weight_decay)
+
+optimizer = torch.optim.SGD(params=[{'params': biases, 'lr': 2 * lr}, {'params': not_biases}],
+                            lr=lr, momentum=momentum, weight_decay=weight_decay)
 
 
 if checkpoint:
+    frozen = []
+    for param_name, param in model.named_parameters():
+        if param.requires_grad:
+            if "pred_convs" not in param_name:
+                frozen.append(param)
+            else:
+                if param_name.endswith('.bias'):
+                    biases.append(param)
+                else:
+                    not_biases.append(param)
+    
+    optimizer = torch.optim.SGD(params=[{'params': biases, 'lr': 2 * lr}, {'params': frozen, 'lr': lr/10}, {'params': not_biases}],
+                            lr=lr, momentum=momentum, weight_decay=weight_decay)
+
 	# checkpoint = torch.load(checkpoint,map_location=device)
 	# start_epoch = checkpoint['epoch'] + 1
 	# epochs_since_improvement = checkpoint['epochs_since_improvement']
@@ -200,7 +215,6 @@ if checkpoint:
                 state_dict[key] = checkpoint['state_dict'][key]
     model.load_state_dict(state_dict,  strict=False)
     print('\nLoaded checkpoint from epoch %d. Best loss so far is %.3f.\n' % (start_epoch, best_loss))
-
 
 
 model.to(device)  
@@ -236,4 +250,4 @@ for epoch in range(start_epoch, epochs):
         else:
             epochs_since_improvement = 0
         # Save checkpoint
-        save_checkpoint(epoch, model, val_loss, is_best, name=args.name)
+        save_checkpoint(epoch, model, best_loss, is_best, name=args.name)

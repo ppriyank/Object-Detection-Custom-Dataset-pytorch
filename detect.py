@@ -88,7 +88,11 @@ def detect(original_image, min_score, max_overlap, top_k, suppress=None , model=
 
 
 if __name__ == '__main__':
-    checkpoint = 'BEST_pretrained_optimizercheckpoint_ssd300.pth.tar'
+    # checkpoint = 'BEST_pretrained_optimizercheckpoint_ssd300.pth.tar'
+    # checkpoint = 'BEST_pretrained_optimizercheckpoint_ssd300.pth.tar'
+    # checkpoint = 'BEST_sgd_scratchcheckpoint_ssd300.pth.tar'
+    checkpoint = 'BEST_scratchcheckpoint_ssd300.pth.tar'
+    
     
     # checkpoint = 'BEST_checkpoint_ssd300.pth.tar'
     checkpoint = torch.load(checkpoint, map_location=device)
@@ -99,7 +103,8 @@ if __name__ == '__main__':
     model = model.to(device)
     model.eval()
 
-    img_path = '/scratch/pp1953/cml/ass/class_pics/IMG_0504.jpg'
+    # img_path = '/scratch/pp1953/cml/ass/class_pics/IMG_0211.jpg'
+    img_path = '/scratch/pp1953/cml/ass/class_pics/IMG_0505.jpg'
     original_image = Image.open(img_path, mode='r')
     original_image = original_image.convert('RGB')
     try:

@@ -681,7 +681,7 @@ def save_checkpoint(epoch, model, loss, is_best, name="_"):
              'loss': loss,
              'model': model}
     filename = name + 'checkpoint_ssd300.pth.tar'
-    torch.save(state, filename)
+    # torch.save(state, filename)
     # If this checkpoint is the best so far, store a copy so it doesn't get overwritten by a worse checkpoint
     if is_best:
         torch.save(state, 'BEST_' + filename)
