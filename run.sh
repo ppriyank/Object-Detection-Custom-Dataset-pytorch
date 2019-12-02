@@ -18,7 +18,7 @@ conda install -n PPUU nb_conda_kernels
 
 
 cd /scratch/pp1953/cml/ass/a-PyTorch-Tutorial-to-Object-Detection/Object-Detection-Custom-Dataset-pytorch/
-python modified_train.py --name="sgd_pretrained" --checkpoint >> "output4.txt"
+python modified_train.py --name="adam_pretrained" --checkpoint >> "output6.txt"
 
 # srun --nodes=1 --cpus-per-task=28 --mem=250GB --gres=gpu:k80:4 -- time=1:00:00 --reservation=chung --pty /bin/bash
 

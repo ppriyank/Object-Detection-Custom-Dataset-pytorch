@@ -184,12 +184,14 @@ for param_name, param in model.named_parameters():
 # optimizer = torch.optim.Adam(params=[{'params': biases, 'lr': 2 * lr}, {'params': not_biases}],
 #                             lr=lr, weight_decay=weight_decay)
 
-optimizer = torch.optim.SGD(params=[{'params': biases, 'lr': 2 * lr}, {'params': not_biases}],
-                            lr=lr, momentum=momentum, weight_decay=weight_decay)
+# optimizer = torch.optim.SGD(params=[{'params': biases, 'lr': 2 * lr}, {'params': not_biases}],
+#                             lr=lr, momentum=momentum, weight_decay=weight_decay)
 
 
 if checkpoint:
     frozen = []
+    biases = list()
+    not_biases = list()
     for param_name, param in model.named_parameters():
         if param.requires_grad:
             if "pred_convs" not in param_name:
@@ -200,8 +202,12 @@ if checkpoint:
                 else:
                     not_biases.append(param)
     
-    optimizer = torch.optim.SGD(params=[{'params': biases, 'lr': 2 * lr}, {'params': frozen, 'lr': lr/10}, {'params': not_biases}],
-                            lr=lr, momentum=momentum, weight_decay=weight_decay)
+    # optimizer = torch.optim.SGD(params=[{'params': biases, 'lr': 2 * lr}, {'params': frozen, 'lr': lr/10}, {'params': not_biases}],
+    #                         lr=lr, momentum=momentum, weight_decay=weight_decay)
+
+    optimizer = torch.optim.Adam(params=[{'params': biases, 'lr': 2 * lr}, {'params': frozen, 'lr': lr/10}, {'params': not_biases}],
+                            lr=lr, weight_decay=weight_decay)
+
 
 	# checkpoint = torch.load(checkpoint,map_location=device)
 	# start_epoch = checkpoint['epoch'] + 1
