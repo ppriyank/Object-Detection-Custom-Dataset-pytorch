@@ -1,4 +1,4 @@
-# Object-Detection-Custom-Dataset-pytorch
+# Object-Detection-Custom-Dataset-pytorch (SSD 300)
 Training object detection on custom dataset 
 
 Credits: [github](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Object-Detection/tree/0d38943b68e2664039e4c22b2838d634b656a927)
